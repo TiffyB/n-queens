@@ -120,7 +120,7 @@
       return oneCount > 1; // fixme
     },
 
-    // test if any columns on this board contain conflicts
+    // test if any columns on this board contain conflicts blah
     hasAnyColConflicts: function() {
       var hasColConflict = false;
       for (var i = 0; i < this.attributes["n"]; i++) {
