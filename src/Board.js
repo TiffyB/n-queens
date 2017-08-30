@@ -79,15 +79,20 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return this.attributes[rowIndex].indexOf(1) !== this.attributes[rowIndex].lastIndexOf(1);
-      
-      
-      
+      //return this.attributes[rowIndex].indexOf(1) !== this.attributes[rowIndex].lastIndexOf(1);
+      return this.get(rowIndex).indexOf(1) !== this.get(rowIndex).lastIndexOf(1);
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
       var hasConflict = false;
+      for (var i = 0; i < this.attributes.n; i++) {
+        if (this.hasRowConflictAt(i)) {
+          hasConflict = true;
+        }
+      }
+      return hasConflict;
+      /*
       for (var key in this.attributes) {
         if (key !== "n") {
           if(this.hasRowConflictAt(Number(key))) {
@@ -96,6 +101,7 @@
         }
       }
       return hasConflict;
+      */
     },
 
 
@@ -105,25 +111,17 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      //check the same index in each row (i.e. colIndex) to see if multiple 1's appear
       var oneCount = 0;
-      //console.log(this.attributes["n"]);
       for (var i = 0; i < this.attributes["n"]; i++) {
-        //console.log(this.attributes[i.toString()][colIndex.toString()]);
         if (this.attributes[i.toString()][colIndex.toString()] === 1) {
           oneCount++
         }
       }
-      console.log("looking at", colIndex)
-      console.log(this.attributes)
-      console.log("final count", oneCount)
-      console.log(oneCount > 1)
       return oneCount > 1; // fixme
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      //return false; // fixme
       var hasColConflict = false;
       for (var i = 0; i < this.attributes["n"]; i++) {
         if (this.hasColConflictAt(i)) {
