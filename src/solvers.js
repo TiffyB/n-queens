@@ -16,7 +16,34 @@
 
 
 window.findNRooksSolution = function(n) {
-  var solution = undefined; //fixme
+  var solution; //fixme
+  var board = new Board({n: n});
+  var pair = [0, 0];
+  var rookCount = 0;
+  
+  for (var i = 0; i < n * n; i++) {
+    //place rook in that location
+    var arr = board.get(pair[0]);
+    arr[pair[1]] = 1;
+    //console.log(pair[1]);
+    //check to see if there are any conflicts
+    if (board.hasAnyColConflicts() || board.hasAnyRowConflicts()) {
+      console.log('got here');
+      arr[pair[1]] = 0;
+    }
+    //increment the 'columnIndex' in our pair
+    pair[1]++;
+    if (pair[1] === n) {
+      pair[1] = 0;
+      pair[0]++;
+    }
+  }  
+  //return 1;
+  solution = board.rows();
+  //console.log(board);
+  console.log('sol', solution );
+
+
 
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
