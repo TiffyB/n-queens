@@ -94,7 +94,7 @@ window.countNRooksSolutions = function(n) {
       //for loop (0 - n )
         //currentBoard[counter][i] = 1
         //set equal to new board with 
-        
+  //console.log('empty', solutions);
   solutionCount = solutions.length;      
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
@@ -104,22 +104,95 @@ window.countNRooksSolutions = function(n) {
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
   var solution = undefined; //fixme
+  
+  var grid = new Board({n: n});
+  if (n === 0 ) {
+    return [];
+  }
+  if (n === 1) {
+    return [[1]];
+  }
+  if (n === 2 || n === 3) { 
+    return 0;  
+  }
+  var addNextQueen = function(row, board) {
+    //debugger;
+    //if row = n
+    if (row === n) { 
+      return board;
+    }
+      //increment solutionCount
+      //return nothing
 
+    //iterate thru all columns
+    for ( var i = 0; i < n; i++ ) { 
+      //try adding a piece at each column of given row (togglePiece)
+      grid.togglePiece(row, i);
+      //if this board doesn't have any conflicts
+      if ( !grid.hasAnyQueensConflicts()) { 
+       // increment row
+        //call recursive function
+        board = grid.rows().slice();
+        //console.log(board);
+        row = row + 1;
+        if (row === n) {
+          console.log(board);
+          return board;
+        }
+        addNextQueen(row, board);
+      } 
+       //else
+          //toggle piece off
+      grid.togglePiece(row, i);
+  
+    }
+  };
+  solution = addNextQueen(0);
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
   return solution;
 };
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = 0; 
-  
-  //declare a variable to hold fresh board
+  var solutionCount = 0;
+  var grid = new Board({n: n});
+  if (n === 2 || n === 3) { 
+    return solutionCount;  
+  }
+  var addNextQueen = function(row) {
+    //debugger;
+    //if row = n
+    if ( row === n) { 
+      solutionCount++; 
+      return;
+    }
+      //increment solutionCount
+      //return nothing
 
+    //iterate thru all columns
+    for ( var i = 0; i < n; i++ ) { 
+      //try adding a piece at each column of given row (togglePiece)
+      grid.togglePiece(row, i);
+      //if this board doesn't have any conflicts
+      if ( !grid.hasAnyQueensConflicts()) { 
+       // increment row
+       
+          //call recursive function
+        addNextQueen(row + 1);
+      } 
+       //else
+          //toggle piece off
+      grid.togglePiece(row, i);
   
-
+    }
+  };
+  //call recursive function with 0
+  addNextQueen(0);
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
 };
+
+
 
 
 
