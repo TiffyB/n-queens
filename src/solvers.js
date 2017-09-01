@@ -103,53 +103,32 @@ window.countNRooksSolutions = function(n) {
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var solution = undefined; //fixme
-  
-  var grid = new Board({n: n});
-  if (n === 0 ) {
-    return [];
-  }
-  if (n === 1) {
-    return [[1]];
-  }
-  if (n === 2 || n === 3) { 
-    return 0;  
-  }
-  var addNextQueen = function(row, board) {
-    //debugger;
-    //if row = n
-    if (row === n) { 
-      return board;
-    }
-      //increment solutionCount
-      //return nothing
+  var solutionCount = 0; //fixme
+  var board = new Board({n: n});
+  var globalBoard = board.rows();
 
-    //iterate thru all columns
-    for ( var i = 0; i < n; i++ ) { 
-      //try adding a piece at each column of given row (togglePiece)
-      grid.togglePiece(row, i);
-      //if this board doesn't have any conflicts
-      if ( !grid.hasAnyQueensConflicts()) { 
-       // increment row
-        //call recursive function
-        board = grid.rows().slice();
-        //console.log(board);
-        row = row + 1;
-        if (row === n) {
-          console.log(board);
-          return board;
-        }
-        addNextQueen(row, board);
-      } 
-       //else
-          //toggle piece off
-      grid.togglePiece(row, i);
-  
+  var addNextQueen = function(row, board) {
+    
+    if (row === n) {
+      console.log(board);
+      globalBoard = board.rows().map(function(row) {
+        return row.slice();
+      });
+      return;
+    }
+    for (var i = 0; i < n; i++) {
+      board.togglePiece(row, i);
+      if (!board.hasAnyQueensConflicts()) {
+        addNextQueen(row + 1, board);
+      }
+      board.togglePiece(row, i);
     }
   };
-  solution = addNextQueen(0);
-  console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
-  return solution;
+  addNextQueen(0, board);
+
+
+  console.log('Single solution for ' + n + ' queens:', JSON.stringify(globalBoard));
+  return globalBoard;
 };
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
